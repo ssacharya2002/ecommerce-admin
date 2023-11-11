@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/ui/modals/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
+import { useOrigin } from "@/hooks/use-origin";
 
 interface SettingsFormProps {
   initialData: Store;
@@ -35,27 +36,25 @@ const formSchema = z.object({
 type SettingsFormValues = z.infer<typeof formSchema>;
 
 export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
-
   const params = useParams();
   const router = useRouter();
+  const origin  = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: SettingsFormValues) => {
-   try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    await axios.patch(`/api/stores/${params.storeId}`,data);
-    router.refresh();
-    toast.success("Store updated.");
-    
-   } catch (error) {
-    toast.error("Something went wrong.");
-   }
-   finally{
-    setLoading(false)
-   }
+      await axios.patch(`/api/stores/${params.storeId}`, data);
+      router.refresh();
+      toast.success("Store updated.");
+    } catch (error) {
+      toast.error("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const form = useForm<SettingsFormValues>({
@@ -63,41 +62,39 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     defaultValues: initialData,
   });
 
-
-  const onDelete = async()=>{
+  const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeId}`)
+      await axios.delete(`/api/stores/${params.storeId}`);
       router.refresh();
       router.push("/");
-      toast.success("Store deleted.")
+      toast.success("Store deleted.");
     } catch (error) {
-      toast.error("Make sure you removed all products and categories.")
-    }
-    finally{
+      toast.error("Make sure you removed all products and categories.");
+    } finally {
       setLoading(false);
       setOpen(false);
     }
-  }
-
+  };
 
   return (
     <>
-
-      <AlertModal 
-
-        isOpen={open} 
-        loading={loading} 
-        onClose={()=>setOpen(false)}  
-        onConfirm={onDelete} 
-         
+      <AlertModal
+        isOpen={open}
+        loading={loading}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
       />
-
 
       <div className="flex items-center justify-between">
         <Heading title="Settings" description="Manage store preferences" />
 
-        <Button disabled={loading} variant={"destructive"} size={"icon"} onClick={() => setOpen(true)}>
+        <Button
+          disabled={loading}
+          variant={"destructive"}
+          size={"icon"}
+          onClick={() => setOpen(true)}
+        >
           <Trash className="h-4 w-4" />
         </Button>
       </div>
@@ -136,8 +133,11 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       </Form>
       <Separator />
 
-      <ApiAlert title="NEXT_PUBLIC_API_URL"description={`${origin}/api/${params.storeId}`} variant="public" />
-
+      <ApiAlert
+        title="NEXT_PUBLIC_API_URL"
+        description={`${origin}/api/${params.storeId}`}
+        variant="public"
+      />
     </>
   );
 };

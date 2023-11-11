@@ -3,12 +3,15 @@ import { Trash } from "lucide-react";
 import { Store } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
 import {
   Form,
   FormControl,
@@ -18,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AlertModal } from "@/components/ui/modals/alert-modal";
 
 interface SettingsFormProps {
   initialData: Store;
@@ -30,11 +34,27 @@ const formSchema = z.object({
 type SettingsFormValues = z.infer<typeof formSchema>;
 
 export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
+
+  const params = useParams();
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: SettingsFormValues) => {
-    console.log(data);
+   try {
+    setLoading(true);
+
+    await axios.patch(`/api/stores/${params.storeId}`,data);
+    router.refresh();
+    toast.success("Store updated.");
+    
+   } catch (error) {
+    toast.error("Something went wrong.");
+   }
+   finally{
+    setLoading(false)
+   }
   };
 
   const form = useForm<SettingsFormValues>({
@@ -42,8 +62,37 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     defaultValues: initialData,
   });
 
+
+  const onDelete = async()=>{
+    try {
+      setLoading(true);
+      await axios.delete(`/api/stores/${params.storeId}`)
+      router.refresh();
+      router.push("/");
+      toast.success("Store deleted.")
+    } catch (error) {
+      toast.error("Make sure you removed all products and categories.")
+    }
+    finally{
+      setLoading(false);
+      setOpen(false);
+    }
+  }
+
+
   return (
     <>
+
+      <AlertModal 
+
+        isOpen={open} 
+        loading={loading} 
+        onClose={()=>setOpen(false)}  
+        onConfirm={onDelete} 
+         
+      />
+
+
       <div className="flex items-center justify-between">
         <Heading title="Settings" description="Manage store preferences" />
 

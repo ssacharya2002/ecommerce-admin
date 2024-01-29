@@ -161,10 +161,10 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
               name="billboardId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Billboard</FormLabel>
                   <Select
                     disabled={loading}
-                    onOpenChange={field.onChange}
+                    onValueChange={field.onChange}
                     value={field.value}
                     defaultValue={field.value}
                   >
@@ -177,8 +177,10 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {billboards.map((billboard)=>(
-                        <SelectItem  key={billboard.id} value={billboard.id} />
+                      {billboards.map((billboard) => (
+                        <SelectItem key={billboard.id} value={billboard.id} >
+                          {billboard.label}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

@@ -16,7 +16,7 @@ export async function GET(req: Request, { params }: { params: { sizeId: string }
 
 
 
-        const size = await prismadb.size.findUnique({
+        const size = await prismadb.Size.findUnique({
             where: {
                 id: params.sizeId
             },
@@ -71,7 +71,7 @@ export async function PATCH(req: Request, { params }: { params: { sizeId: string
             return new NextResponse("Unauthorized", { status: 403 });
         }
 
-        const size = await prismadb.size.updateMany({
+        const size = await prismadb.Size.updateMany({
             where: {
                 id: params.sizeId
             },
@@ -118,7 +118,7 @@ export async function DELETE(req: Request, { params }: { params: { sizeId: strin
         }
 
 
-        const size = await prismadb.size.deleteMany({
+        const size = await prismadb.Size.deleteMany({
             where: {
                 id: params.sizeId
             },

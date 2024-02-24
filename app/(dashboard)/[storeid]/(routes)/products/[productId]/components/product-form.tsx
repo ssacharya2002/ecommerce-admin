@@ -84,6 +84,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           data
         );
       } else {
+        console.log(`/api/${params.storeId}/products`, data);
+        
         await axios.post(`/api/${params.storeId}/products`, data);
       }
       router.refresh();

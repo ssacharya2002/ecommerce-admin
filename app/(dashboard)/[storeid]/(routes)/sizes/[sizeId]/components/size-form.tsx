@@ -1,6 +1,6 @@
 "use client";
 import { Trash } from "lucide-react";
-import { size } from "@prisma/client";
+import { Size } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
@@ -32,7 +32,7 @@ const formSchema = z.object({
 type SizeFormValues = z.infer<typeof formSchema>;
 
 interface SizeFormProps {
-  initialData: size | null;
+  initialData: Size | null;
 }
 
 export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {

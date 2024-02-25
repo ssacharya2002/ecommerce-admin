@@ -44,7 +44,7 @@ export async function POST(req: Request, { params }: { params: { storeId: string
             return new NextResponse("Unauthorized", { status: 403 })
         }
 
-        const size = await prismadb.Size.create({
+        const size = await prismadb.size.create({
             data: {
                 name,
                 value,
@@ -70,7 +70,7 @@ export async function GET(req: Request, { params }: { params: { storeId: string 
             return new NextResponse("Store Id is required", { status: 400 });
         }
 
-        const size = await prismadb.Size.findMany({
+        const size = await prismadb.size.findMany({
             where: {
                 storeId: params.storeId
             },

@@ -43,7 +43,7 @@ export async function POST(req: Request, { params }: { params: { storeId: string
             return new NextResponse("Unauthorized", { status: 403 })
         }
 
-        const color = await prismadb.Color.create({
+        const color = await prismadb.color.create({
             data: {
                 name,
                 value,
@@ -69,7 +69,7 @@ export async function GET(req: Request, { params }: { params: { storeId: string 
             return new NextResponse("Store Id is required", { status: 400 });
         }
 
-        const colors = await prismadb.Color.findMany({
+        const colors = await prismadb.color.findMany({
             where: {
                 storeId: params.storeId
             },

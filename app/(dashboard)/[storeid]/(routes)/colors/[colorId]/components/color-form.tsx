@@ -1,6 +1,6 @@
 "use client";
 import { Trash } from "lucide-react";
-import { colors } from "@prisma/client";
+import { Color } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
@@ -34,7 +34,7 @@ const formSchema = z.object({
 type ColorFormValues = z.infer<typeof formSchema>;
 
 interface ColorFormProps {
-  initialData: colors | null;
+  initialData: Color | null;
 }
 
 export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
@@ -46,7 +46,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
 
   const title = initialData ? "Edit color" : "Create color";
   const description = initialData ? "Edit a color" : "Add a color";
-  const toastMessaages = initialData ? "Color updated" : "Color created";
+  const toastMessages = initialData ? "Color updated" : "Color created";
   const action = initialData ? "Save changes" : "Create";
 
   const onSubmit = async (data: ColorFormValues) => {
@@ -63,7 +63,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
       }
       router.refresh();
       router.push(`/${params.storeId}/colors`);
-      toast.success(toastMessaages);
+      toast.success(toastMessages);
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {

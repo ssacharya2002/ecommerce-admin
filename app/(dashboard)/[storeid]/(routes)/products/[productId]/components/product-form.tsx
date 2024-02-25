@@ -120,16 +120,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.storeId}/products/${params.productId}`
-      );
+      await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
       router.refresh();
       router.push(`/${params.storeId}/products`);
       toast.success("Store deleted.");
     } catch (error) {
-      toast.error(
-        "Something wen wrong"
-      );
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -283,7 +279,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     <SelectContent>
                       {colors.map((color) => (
                         <SelectItem key={color.id} value={color.id}>
-                          {color.name}
+                          <div className="flex justify-between ">
+                            {color.name}
+                            <div className="px-2">
+                              <div
+                                className="w-4 h-4 rounded-full "
+                                style={{ backgroundColor: color.value }}
+                              />
+                            </div>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
